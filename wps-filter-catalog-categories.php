@@ -12,15 +12,21 @@ if ( !defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-add_filter( 'woocommerce_product_subcategories_args', 'test_woocommerce_product_subcategories_args' );
-function test_woocommerce_product_subcategories_args( $args ) {
-	if ( method_exists( 'WooCommerce_Product_Search_Service', 'get_term_ids_for_request' ) ) {
-		if ( isset( $_REQUEST['ixwpst'] ) ) {
-			$term_ids_for_request = WooCommerce_Product_Search_Service::get_term_ids_for_request( $args, array( 'product_cat' ) );
-			foreach ( $term_ids_for_request as $term_id ) {
-				$args['parent'] = $term_id;
+class WPS_Filter_Catalog_Categories {
+
+	public static function init() {
+		add_filter( 'woocommerce_product_subcategories_args', array( __CLASS__, 'woocommerce_product_subcategories_args' ) );
+	}
+
+	public static function woocommerce_product_subcategories_args( $args ) {
+		if ( method_exists( 'WooCommerce_Product_Search_Service', 'get_term_ids_for_request' ) ) {
+			if ( isset( $_REQUEST['ixwpst'] ) ) {
+				$term_ids_for_request = WooCommerce_Product_Search_Service::get_term_ids_for_request( $args, array( 'product_cat' ) );
+				foreach ( $term_ids_for_request as $term_id ) {
+					$args['parent'] = $term_id;
+				}
 			}
 		}
+		return $args;
 	}
-	return $args;
-}
+} WPS_Filter_Catalog_Categories::init();
