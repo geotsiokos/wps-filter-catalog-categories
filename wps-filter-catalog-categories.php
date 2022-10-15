@@ -19,14 +19,12 @@ class WPS_Filter_Catalog_Categories {
 	}
 
 	public static function woocommerce_product_subcategories_args( $args ) {
-		if ( method_exists( 'WooCommerce_Product_Search_Service', 'get_term_ids_for_request' ) ) {
-			if ( isset( $_REQUEST['ixwpst'] ) ) {
-				if ( isset( $_REQUEST['ixwpst']['product_cat'] ) ) {
-					$filter_product_cat = $_REQUEST['ixwpst']['product_cat'];
-					if ( count( $filter_product_cat ) > 0 ) {
-						foreach ( $filter_product_cat as $term_id ) {
-							$args['parent'] = $term_id;
-						}
+		if ( isset( $_REQUEST['ixwpst'] ) ) {
+			if ( isset( $_REQUEST['ixwpst']['product_cat'] ) ) {
+				$filter_product_cat = $_REQUEST['ixwpst']['product_cat'];
+				if ( count( $filter_product_cat ) > 0 ) {
+					foreach ( $filter_product_cat as $term_id ) {
+						$args['parent'] = $term_id;
 					}
 				}
 			}
